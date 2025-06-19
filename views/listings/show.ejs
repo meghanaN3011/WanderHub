@@ -29,10 +29,14 @@
         <div class="btns d-flex gap-4 ms-3 mb-3">
           <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn" style="margin-left: -5px;">Edit</a>
 
-          <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
-            <button type="submit" class="btn btn-dark">Delete</button>
-          </form>
-        </div>
+         <% if (currUser && review.author && review.author._id.toString() === currUser._id.toString()) { %>
+          <div class="text-end">
+            <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+              <button class="btn btn-sm btn-dark mb-4 me-2">Delete</button>
+            </form>
+          </div>
+        <% } %>
+        
          <% } %>
      
 
