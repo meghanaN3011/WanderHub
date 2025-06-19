@@ -1,0 +1,25 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row mt-4">
+    <h3 class="col-6 offset-3 mb-3">Log In to WanderHub</h3>
+    <div class="col-6 offset-3">
+        <form action="/login" method="POST" class="needs-validation" novalidate>
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="position-relative">
+                    <input type="password" name="password" class="form-control pe-5" id="password" required>
+                    <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword" style="cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <button class="btn btn-success" id="login">Login</button>
+
+        </form>
+    </div>
+</div>

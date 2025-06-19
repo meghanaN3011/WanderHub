@@ -1,0 +1,152 @@
+<% layout("layouts/boilerplate") -%>
+
+<style>
+  .filters-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    flex: 1;
+    gap: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .filters-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter {
+    flex: 0 0 auto;
+    text-align: center;
+    min-width: 80px;
+    opacity: 0.7;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .filter.active {
+    opacity: 1;
+    border-bottom: 2px solid black;
+    font-weight: 600;
+  }
+
+  .filter p {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+  }
+
+  .tax-info {
+    display: none;
+  }
+
+  .tax-toggle {
+    border: 1px solid gray;
+    border-radius: 1rem;
+    padding: 0.75rem 1.25rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  .scroll-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #444;
+    cursor: pointer;
+    padding: 0 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .filter {
+      min-width: 70px;
+    }
+
+    .tax-toggle {
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+</style>
+
+<div class="d-flex align-items-center" style="position: relative;">
+  <div id="filters" class="filters-wrapper">
+    <% const categories = [
+      { name: "Trending", value: "trending", icon: "fa-fire" },
+      { name: "Rooms", value: "rooms", icon: "fa-bed" },
+      { name: "Iconic Cities", value: "iconic-cities", icon: "fa-city" },
+      { name: "Mountains", value: "mountains", icon: "fa-mountain-sun" },
+      { name: "Amazing Pools", value: "amazing-pools", icon: "fa-person-swimming" },
+      { name: "Farms", value: "farms", icon: "fa-plant-wilt" },
+      { name: "Camping", value: "camping", icon: "fa-campground" },
+      { name: "Chef's Kitchen", value: "chefs-kitchen", icon: "fa-utensils" },
+      { name: "Arctic", value: "arctic", icon: "fa-snowflake" },
+      { name: "Beaches", value: "beaches", icon: "fa-umbrella-beach" },
+      { name: "Play", value: "play", icon: "fa-gamepad" }
+    ]; %>
+
+    <!-- All Category Option -->
+    <a href="/listings" class="filter text-decoration-none text-dark <%= !category ? 'active' : '' %>">
+      <div><i class="fa-solid fa-globe mt-4"></i></div>
+      <p>All</p>
+    </a>
+
+    <% categories.forEach(cat => { %>
+      <a href="/listings?category=<%= cat.value %>" class="filter text-decoration-none text-dark <%= category === cat.value ? 'active' : '' %>">
+        <div><i class="fa-solid <%= cat.icon %> mt-4"></i></div>
+        <p><%= cat.name %></p>
+      </a>
+    <% }) %>
+  </div>
+
+  <!-- Scroll Button -->
+  <button class="scroll-btn right" onclick="scrollFilters(200)">
+    <i class="fa-solid fa-angle-right fs-6 mb-1"></i>
+  </button>
+
+  <!-- Tax Toggle -->
+  <div class="tax-toggle ms-3">
+    <div class="form-check-reverse form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+    </div>
+  </div>
+</div>
+
+<!-- Listings -->
+<div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 mt-3">
+  <% for (let listing of allListings) { %>
+    <a href="/listings/<%= listing._id %>" class="listing-link">
+      <div class="card col listing-card">
+        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%= listing.title %><br></b>
+            ₹<%= listing.price.toLocaleString("en-IN") %> / Night &nbsp;
+            <i class="tax-info">(+18% GST)</i>
+          </p>
+        </div>
+      </div>
+    </a>
+  <% } %>
+</div>
+
+<script>
+  function scrollFilters(offset) {
+    const filters = document.getElementById('filters');
+    filters.scrollLeft += offset;
+  }
+
+  const taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  taxSwitch.addEventListener("click", () => {
+    const taxInfo = document.getElementsByClassName("tax-info");
+    for (let info of taxInfo) {
+      info.style.display = (info.style.display !== "inline") ? "inline" : "none";
+    }
+  });
+</script>
